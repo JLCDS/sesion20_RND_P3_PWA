@@ -1,6 +1,7 @@
 // 6. Orientation - DeviceOrientationEvent + Screen Orientation API
-// En iOS 13+ hay que pedir permiso explícito con DeviceOrientationEvent.requestPermission().
-import { $, setStatus, describeError } from '../utils.js';
+// DeviceOrientationEvent.requestPermission() existe en iOS 13+ (muestra diálogo) y en Chrome reciente
+// (sin diálogo: devuelve 'denied' si el sitio tiene bloqueados los "Sensores de movimiento").
+import { $, setStatus, describeError, sensorPermissionHelp } from '../utils.js';
 
 let listening = false;
 
@@ -29,7 +30,9 @@ async function enable() {
         if (typeof DeviceOrientationEvent !== 'undefined' &&
             typeof DeviceOrientationEvent.requestPermission === 'function') {
             const res = await DeviceOrientationEvent.requestPermission();
-            if (res !== 'granted') throw new Error('Permiso de orientación denegado');
+            if (res !== 'granted') {
+                return setStatus(status, 'Permiso de orientación denegado. ' + sensorPermissionHelp(), 'err');
+            }
         }
         if (!listening) {
             const evt = 'ondeviceorientationabsolute' in window ? 'deviceorientationabsolute' : 'deviceorientation';
@@ -40,7 +43,8 @@ async function enable() {
         // Si en 2s no llega ningún dato, el equipo no tiene giroscopio (p. ej. un PC)
         setTimeout(() => {
             if ($('#o-beta').textContent === '–') {
-                setStatus(status, 'No llegan datos: este dispositivo no tiene sensor de orientación.', 'err');
+                setStatus(status, 'No llegan datos: el equipo no tiene sensor de orientación o el permiso está bloqueado. ' +
+                    sensorPermissionHelp(), 'err');
             }
         }, 2000);
     } catch (err) {

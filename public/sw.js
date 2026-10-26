@@ -1,7 +1,7 @@
 // Service Worker: cache del App Shell para que la app funcione offline.
 // Rutas relativas para que funcione tanto en localhost como en GitHub Pages (/<repo>/).
 
-const STATIC_CACHE = 'static-v1';
+const STATIC_CACHE = 'static-v2';
 const DYNAMIC_CACHE = 'dynamic-v1';
 
 const APP_SHELL = [

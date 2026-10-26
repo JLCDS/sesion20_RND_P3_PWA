@@ -81,5 +81,18 @@ export function withTransition(update, direction) {
     const root = document.documentElement;
     if (direction) root.classList.add(direction);
     const vt = document.startViewTransition(update);
+    // Si se inicia otra transición antes de que termine esta, 'ready' se rechaza con AbortError: es normal
+    vt.ready.catch(() => {});
     return vt.finished.finally(() => root.classList.remove('nav-forward', 'nav-back'));
+}
+
+// Instrucciones para desbloquear los sensores de movimiento según la plataforma.
+// En Chrome Android requestPermission() no muestra diálogo: responde 'denied' si el sitio los tiene bloqueados.
+export function sensorPermissionHelp() {
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    return ios
+        ? 'En iPhone: cierra y vuelve a abrir Safari y acepta el permiso de "Movimiento y orientación".'
+        : 'En Chrome: toca el icono junto a la URL → Permisos (o Configuración del sitio) → ' +
+          'Sensores de movimiento → Permitir, y recarga la página.';
 }
