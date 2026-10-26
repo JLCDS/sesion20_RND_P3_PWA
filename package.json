@@ -1,0 +1,17 @@
+{
+  "name": "recursos-nativos-sesion-20",
+  "version": "1.0.0",
+  "description": "Taller Recursos Nativos en dispositivos móviles - Parte 3 (demos de whatpwacando.today)",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Recursos Nativos PWA</title>
+    <meta name="description" content="Taller Recursos Nativos Parte 3 - demos de whatpwacando.today">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="img/favicon.ico">
+    <link rel="apple-touch-icon" href="img/icons/icon-192x192.png">
+    <meta name="theme-color" content="#3498db">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nativos PWA">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="topbar">
+        <button id="back-btn" class="icon-btn" aria-label="Volver" hidden>&#8592;</button>
+        <h1 id="page-title">Recursos Nativos</h1>
+        <span id="online-badge" class="badge">online</span>
+    </header>
+
+    <main id="app">
+
+        <!-- ===================== HOME ===================== -->
+        <section id="home" class="page">
+            <p class="intro">
+                Taller Sesión 20 · Recursos nativos en dispositivos móviles (Parte 3).
+                Toca una tarjeta para abrir el demo. Cada tarjeta indica si tu navegador soporta la API.
+            </p>
+            <div id="demo-grid" class="grid"></div>
+            <button id="install-btn" class="btn btn-block" hidden>Instalar aplicación</button>
+        </section>
+
+        <!-- ===================== 1. AUTHENTICATION ===================== -->
+        <section id="auth" class="page" hidden>
+            <p class="help">Web Authentication (WebAuthn / Passkeys): registra una credencial con la huella, rostro o PIN del dispositivo y luego inicia sesión con ella.</p>
+            <label class="field">Usuario
+                <input id="auth-user" type="text" placeholder="ej: juan" autocomplete="username webauthn">
+            </label>
+            <div class="row">
+                <button id="auth-register" class="btn">Registrar passkey</button>
+                <button id="auth-login" class="btn btn-alt">Iniciar sesión</button>
+            </div>
+            <button id="auth-clear" class="btn btn-ghost">Borrar credenciales guardadas</button>
+            <div id="auth-status" class="status"></div>
+            <pre id="auth-log" class="log"></pre>
+        </section>
+
+        <!-- ===================== 2. FACE DETECTION ===================== -->
+        <section id="face" class="page" hidden>
+            <p class="help">Detecta rostros en tiempo real con la cámara. Usa la Shape Detection API (<code>FaceDetector</code>) y, si el navegador no la tiene, MediaPipe como respaldo.</p>
+            <div class="stage">
+                <video id="face-video" playsinline muted></video>
+                <canvas id="face-canvas"></canvas>
+            </div>
+            <div class="row">
+                <button id="face-start" class="btn">Iniciar cámara</button>
+                <button id="face-switch" class="btn btn-alt">Cambiar cámara</button>
+                <button id="face-stop" class="btn btn-ghost">Detener</button>
+            </div>
+            <div id="face-status" class="status"></div>
+        </section>
+
+        <!-- ===================== 3. BARCODE DETECTION ===================== -->
+        <section id="barcode" class="page" hidden>
+            <p class="help">Escanea códigos QR y de barras con <code>BarcodeDetector</code>, desde la cámara o desde una imagen.</p>
+            <div class="stage">
+                <video id="barcode-video" playsinline muted></video>
+                <canvas id="barcode-canvas"></canvas>
+            </div>
+            <div class="row">
+                <button id="barcode-start" class="btn">Escanear con cámara</button>
+                <button id="barcode-stop" class="btn btn-ghost">Detener</button>
+            </div>
+            <label class="btn btn-alt btn-block file-btn">Escanear desde imagen
+                <input id="barcode-file" type="file" accept="image/*" hidden>
+            </label>
+            <div id="barcode-status" class="status"></div>
+            <ul id="barcode-results" class="list"></ul>
+        </section>
+
+        <!-- ===================== 4. SCREEN CAPTURE ===================== -->
+        <section id="screen" class="page" hidden>
+            <p class="help">Captura de pantalla con <code>getDisplayMedia</code>: comparte una pestaña, ventana o pantalla, toma una foto o grábala en video.</p>
+            <div class="stage">
+                <video id="screen-video" playsinline muted autoplay></video>
+            </div>
+            <div class="row">
+                <button id="screen-start" class="btn">Compartir pantalla</button>
+                <button id="screen-shot" class="btn btn-alt">Tomar captura</button>
+            </div>
+            <div class="row">
+                <button id="screen-rec" class="btn btn-alt">Grabar</button>
+                <button id="screen-stop" class="btn btn-ghost">Detener</button>
+            </div>
+            <div id="screen-status" class="status"></div>
+            <div id="screen-output" class="output"></div>
+        </section>
+
+        <!-- ===================== 5. AUDIO RECORDING ===================== -->
+        <section id="audio" class="page" hidden>
+            <p class="help">Graba audio del micrófono con <code>MediaRecorder</code> y visualiza la señal con la Web Audio API.</p>
+            <canvas id="audio-canvas" class="wave"></canvas>
+            <div class="row">
+                <button id="audio-rec" class="btn">&#9679; Grabar</button>
+                <button id="audio-stop" class="btn btn-ghost">&#9632; Detener</button>
+            </div>
+            <div id="audio-status" class="status"></div>
+            <ul id="audio-list" class="list"></ul>
+        </section>
+
+        <!-- ===================== 6. ORIENTATION ===================== -->
+        <section id="orientation" class="page" hidden>
+            <p class="help">Lee la orientación del dispositivo (<code>deviceorientation</code>) y la orientación de la pantalla (<code>screen.orientation</code>). Inclina el teléfono.</p>
+            <button id="orient-start" class="btn btn-block">Activar sensores</button>
+            <div class="scene">
+                <div id="orient-phone" class="phone3d"><span>PWA</span></div>
+            </div>
+            <div class="compass"><div id="orient-needle" class="needle"></div></div>
+            <dl class="readings">
+                <dt>alpha (Z)</dt><dd id="o-alpha">–</dd>
+                <dt>beta (X)</dt><dd id="o-beta">–</dd>
+                <dt>gamma (Y)</dt><dd id="o-gamma">–</dd>
+                <dt>pantalla</dt><dd id="o-screen">–</dd>
+            </dl>
+            <div class="row">
+                <button id="orient-lock" class="btn btn-alt">Bloquear orientación</button>
+                <button id="orient-unlock" class="btn btn-ghost">Desbloquear</button>
+            </div>
+            <div id="orient-status" class="status"></div>
+        </section>
+
+        <!-- ===================== 7. MOTION ===================== -->
+        <section id="motion" class="page" hidden>
+            <p class="help">Acelerómetro y giroscopio con <code>devicemotion</code>. Mueve o agita el teléfono para detectar la sacudida.</p>
+            <button id="motion-start" class="btn btn-block">Activar sensores</button>
+            <h3>Aceleración (m/s²)</h3>
+            <div class="bars" id="motion-acc"></div>
+            <h3>Aceleración con gravedad (m/s²)</h3>
+            <div class="bars" id="motion-grav"></div>
+            <h3>Velocidad de rotación (°/s)</h3>
+            <div class="bars" id="motion-rot"></div>
+            <div class="shake" id="motion-shake">Sacudidas: <strong id="motion-shakes">0</strong></div>
+            <div class="ball-box"><div id="motion-ball" class="ball"></div></div>
+            <div id="motion-status" class="status"></div>
+        </section>
+
+        <!-- ===================== 8. MULTITOUCH ===================== -->
+        <section id="touch" class="page" hidden>
+            <p class="help">Pointer/Touch events: toca con varios dedos a la vez. Cada dedo tiene su color y deja un rastro.</p>
+            <div class="row">
+                <span class="status inline">Dedos activos: <strong id="touch-count">0</strong> · máx: <strong id="touch-max">0</strong></span>
+                <button id="touch-clear" class="btn btn-ghost">Limpiar</button>
+            </div>
+            <canvas id="touch-canvas" class="touch-area"></canvas>
+        </section>
+
+        <!-- ===================== 9. VIEW TRANSITION ===================== -->
+        <section id="viewtransition" class="page" hidden>
+            <p class="help">View Transition API: toda la navegación de esta app usa <code>document.startViewTransition</code>. Aquí puedes ver transiciones de elementos compartidos: toca un héroe para expandirlo o reordena la lista.</p>
+            <div class="row">
+                <button id="vt-shuffle" class="btn">Reordenar</button>
+                <button id="vt-toggle" class="btn btn-alt">Cambiar vista</button>
+            </div>
+            <div id="vt-status" class="status"></div>
+            <ul id="vt-list" class="vt-list"></ul>
+            <div id="vt-detail" class="vt-detail" hidden></div>
+        </section>
+
+    </main>
+
+    <div id="toast" class="toast" role="status"></div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
